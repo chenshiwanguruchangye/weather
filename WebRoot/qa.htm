@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>答题</title>
+    <script src="http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        #div-btn{
+           text-align: center;
+        }
+        #btn-ans{
+            text-align: center;
+            width: 150px;
+        }
+    </style>
+    <script type="text/javascript">
+       $(document).ready(function(){
+        	/////接受  DBTest的数据//////
+        	var datatemp;
+            var application=0;
+            $.post("/weather/DBTest",{
+              action: "test"
+            },function(data,status){
+             data=JSON.parse(data);
+             //alert(data);
+             datatemp=data;
+             $("#t1").text(data["1"].Q);
+             $("#a11").html(data["1"].A);
+             $("#a12").html(data["1"].B);
+             $("#a13").html(data["1"].C);
+             $("#a14").html(data["1"].D);
+             
+             $("#t2").text(data["2"].Q);
+             $("#a21").html(data["2"].A);
+             $("#a22").html(data["2"].B);
+             $("#a23").html(data["2"].C);
+             $("#a24").html(data["2"].D);
+            
+             $("#t3").text(data["3"].Q);
+             $("#a31").html(data["3"].A);
+             $("#a32").html(data["3"].B);
+             $("#a33").html(data["3"].C);
+             $("#a34").html(data["3"].D);
+            
+             $("#t4").text(data["4"].Q);
+             $("#a41").html(data["4"].A);
+             $("#a42").html(data["4"].B);
+             $("#a43").html(data["4"].C);
+             $("#a44").html(data["4"].D);
+            });
+        	
+            $("#btn-ans").click(function(){
+              if(application==0){
+                application=1;
+                var mark=0;
+        	    var s1 = $("input[name=radiobutton1]:checked").val();
+        	    var s2 = $("input[name=radiobutton2]:checked").val();
+        	    var s3 = $("input[name=radiobutton3]:checked").val();
+        	    var s4 = $("input[name=radiobutton4]:checked").val();
+               
+                //检查答案
+                if(s1==datatemp["1"].answer)
+                  mark+=25;
+                if(s2==datatemp["2"].answer)
+                  mark+=25; 
+                if(s3==datatemp["3"].answer)
+                  mark+=25;
+                if(s4==datatemp["4"].answer)
+                  mark+=25;
+                
+                $.post("/weather/DBTest", {
+                      action : "save",
+					  mark : mark + "",
+					  user : 1805010501+ ""
+					}, function(data, status) {
+					 alert("已交卷\n您的作答是:" + s1+s2+s3+s4 + "\n您的得分是:"+mark+"分" +"\n谢谢");
+                    });
+                    
+              }else
+              {
+                alert("请勿重复提交，谢谢！");
+              }
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="container">
+<h3 align="center">第一题</h3>
+<p id="t1"> 题目有待从数据库读取 </p>
+    <input type="radio" name="radiobutton1" value="A" checked><span id="a11">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton1" value="B"><span id="a12">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton1" value="C"><span id="a13">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton1" value="D"><span id="a14">选项有待从数据库读取</span><br>
+<h3 align="center">第二题</h3>
+<p id="t2">题目有待从数据库读取</p>
+    <input type="radio" name="radiobutton2" value="A" checked><span id="a21">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton2" value="B"><span id="a22">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton2" value="C"><span id="a23">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton2" value="D"><span id="a24">选项有待从数据库读取</span><br>
+<h3 align="center">第三题</h3>
+<p id="t3">题目有待从数据库读取</p>
+    <input type="radio" name="radiobutton3" value="A" checked><span id="a31">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton3" value="B"><span id="a32">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton3" value="C"><span id="a33">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton3" value="D"><span id="a34">选项有待从数据库读取</span><br>
+<h3 align="center">第四题</h3>
+<p id="t4">题目有待从数据库读取</p>
+    <input type="radio" name="radiobutton4" value="A" checked><span id="a41">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton4" value="B"><span id="a42">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton4" value="C"><span id="a43">选项有待从数据库读取</span><br>
+    <input type="radio" name="radiobutton4" value="D"><span id="a44">选项有待从数据库读取</span><br>
+          
+    <br>
+    <div id="div-btn">
+    <button id="btn-ans" type="button" class="btn btn-success">交 卷</button>
+    </div>
+    <br>
+    <br>
+</div>
+</body>
+</html>
